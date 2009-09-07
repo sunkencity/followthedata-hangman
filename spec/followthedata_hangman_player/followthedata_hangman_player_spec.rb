@@ -9,12 +9,18 @@ describe FollowthedataHangmanPlayer::FollowthedataHangmanPlayer do
 
   end
   
-  it "play game".should_not do
+  it "win game" do
     lambda {
       p = FollowthedataHangmanPlayer::FollowthedataHangmanPlayer.new
-      p.word_list = %w{foo bar baz}
+      p.word_list = %w{foo bar baj}
       p.new_game(6)
       p.guess("___", 5)
+      p.incorrect_guess("e")
+      p.guess("___", 4)
+      p.correct_guess("a")
+      p.correct_guess("b")
+      p.correct_guess("j")
+      p.game_result("result", "baj")
     }.should_not raise_error
   end
 

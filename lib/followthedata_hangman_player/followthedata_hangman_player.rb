@@ -24,18 +24,11 @@ module FollowthedataHangmanPlayer
     # the word parameter would be "s___s", if you then guess 'o', the next turn it would be "s_o_s", and so on.
     # guesses_left is how many guesses you have left before your player is hung.
     def guess(word, guesses_left)
-      
-      # reject words which doesn't match pattern
       matcher = Regexp.new("^#{word.gsub("_", ".")}$")
       @my_word_list.reject! { |w| !( matcher =~ w ) } 
-      
-      # sort @left by frequency
-      rating = @my_word_list.inject({}) { |r,w| w.split(//).each { |i| r[i] = r[i].nil? ? 1 : (r[i]+1) }; r }
+      rating = @my_word_list.inject({}) { |r,w| w.split(//).each { |i| r[i] = (r[i] || 0) + 1  }; r }
       @left = @left.sort_by { |x| rating[x] || -1 }
-     
-      # pick wovels first
       @left = @left.sort_by { |x| %w{a e i o u y}.include?(x) ? 10 : 0 } if guesses_left > 4
-      
       @left.pop
     end
 
