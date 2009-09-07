@@ -1,0 +1,4 @@
+#!/bin/sh
+sudo gem uninstall  hangman_followthedata_hangman_player
+rake gem
+sudo gem install pkg/hangman_followthedata_hangman_player-1.0.gem
