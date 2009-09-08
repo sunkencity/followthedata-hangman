@@ -15,7 +15,7 @@ module FollowthedataHangmanPlayer
     # a new game has started.  The number of guesses the player has left is passed in (default 6),
     # in case you want to keep track of it.
     def new_game(guesses_left)
-      @my_word_list = Array.new(@original_word_list)
+      @word_list = Array.new(@original_word_list)
       @left = ('a'..'z').to_a
     end
 
@@ -25,21 +25,20 @@ module FollowthedataHangmanPlayer
     # guesses_left is how many guesses you have left before your player is hung.
     def guess(word, guesses_left)
       matcher = Regexp.new("^#{word.gsub("_", ".")}$")
-      @my_word_list.reject! { |w| !( matcher =~ w ) } 
-      rating = @my_word_list.inject({}) { |r,w| w.split(//).each { |i| r[i] = (r[i] || 0) + 1  }; r }
-      @left = @left.sort_by { |x| rating[x] || -1 }
-      @left = @left.sort_by { |x| %w{a e i o u y}.include?(x) ? 10 : 0 } if guesses_left > 4
+      @word_list.reject! { |w| !( matcher =~ w ) } 
+      rating = @word_list.inject({}) { |r,w| w.split(//).each { |i| r[i] = (r[i] || 0) + 1  }; r }
+      @left = @left.sort_by { |x| (guesses_left < 4) ? (rating[x] || -1) : (%w{a e i o u y}.include?(x) ? 10 : 0) }
       @left.pop
     end
 
     # notifies you that your last guess was incorrect, and passes your guess back to the method
     def incorrect_guess(guess)
-      @my_word_list.reject! { |w| w.include? guess }
+      @word_list.reject! { |w| w.include? guess }
     end
 
     # notifies you that your last guess was correct, and passes your guess back to the method
     def correct_guess(guess)
-      @my_word_list.reject! { |w| !w.include?(guess) }
+      @word_list.reject! { |w| !w.include?(guess) }
     end
 
     # you lost the game.  The reason is in the reason parameter
