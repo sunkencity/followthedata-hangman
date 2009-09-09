@@ -24,13 +24,30 @@ module FollowthedataHangmanPlayer
     # the word parameter would be "s___s", if you then guess 'o', the next turn it would be "s_o_s", and so on.
     # guesses_left is how many guesses you have left before your player is hung.
     def guess(word, guesses_left)
-      matcher = Regexp.new("^#{word.gsub("_", ".")}$")
-      @word_list.reject! { |w| !( matcher =~ w ) } 
-      rating = @word_list.inject({}) { |r,w| w.split(//).each { |i| r[i] = (r[i] || 0) + 1  }; r }
-      @left = @left.sort_by { |x| (guesses_left < 4) ? (rating[x] || -1) : (%w{a e i o u y}.include?(x) ? 10 : 0) }
+      update_word_list_based_on(word)
+      guesses_left > 4 ? select_vocals : select_character(character_count)
       @left.pop
     end
+    
+    def select_character rating
+      @left = @left.sort_by { |x| rating[x] || 0 }
+    end
+    
+    def select_vocals
+      @left = @left.sort_by { |x| %w{a e}.include? ? 0 : 1 } #i o u y
+    end
+    
+    def character_count
+      r = Hash.new(0)
+      @word_list.join.split(//).map { |i| r[i] = r[i].next }
+      r
+    end
 
+    def update_word_list_based_on word
+      matcher = Regexp.new("^#{word.gsub("_", ".")}$")
+      @word_list.reject! { |w| !( matcher =~ w ) }
+    end
+    
     # notifies you that your last guess was incorrect, and passes your guess back to the method
     def incorrect_guess(guess)
       @word_list.reject! { |w| w.include? guess }
