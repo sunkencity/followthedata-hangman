@@ -8,7 +8,7 @@ describe FollowthedataHangmanPlayer::FollowthedataHangmanPlayer do
     lambda { FollowthedataHangmanPlayer::FollowthedataHangmanPlayer.new }.should_not raise_error
 
   end
-  
+
   it "win game" do
     lambda {
       p = FollowthedataHangmanPlayer::FollowthedataHangmanPlayer.new

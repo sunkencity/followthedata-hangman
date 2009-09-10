@@ -25,18 +25,18 @@ module FollowthedataHangmanPlayer
     # guesses_left is how many guesses you have left before your player is hung.
     def guess(word, guesses_left)
       update_word_list_based_on(word)
-      guesses_left > 4 ? select_vocals : select_character(character_count)
+      guesses_left > 4 ? select_vocals : select_character(character_count())
       @left.pop
     end
-    
+
     def select_character rating
       @left = @left.sort_by { |x| rating[x] || 0 }
     end
-    
+
     def select_vocals
-      @left = @left.sort_by { |x| %w{a e}.include? ? 0 : 1 } #i o u y
+      @left = @left.sort_by { |x| %w{a e}.include?(x) ? 0 : 1 } #i o u y
     end
-    
+
     def character_count
       r = Hash.new(0)
       @word_list.join.split(//).map { |i| r[i] = r[i].next }
@@ -47,7 +47,7 @@ module FollowthedataHangmanPlayer
       matcher = Regexp.new("^#{word.gsub("_", ".")}$")
       @word_list.reject! { |w| !( matcher =~ w ) }
     end
-    
+
     # notifies you that your last guess was incorrect, and passes your guess back to the method
     def incorrect_guess(guess)
       @word_list.reject! { |w| w.include? guess }
@@ -66,6 +66,6 @@ module FollowthedataHangmanPlayer
     # The spelled out word will be provided regardless of the result.
     def game_result(result, word)
     end
-    
+
   end
 end
