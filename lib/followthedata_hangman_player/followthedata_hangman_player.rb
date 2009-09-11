@@ -18,7 +18,9 @@ module FollowthedataHangmanPlayer
     end
     
     def select_vocals
-      @left = @left.sort_by { |x| %w{a e}.include?(x) ? 0 : 1 }
+      vocals = { "a" => 1, "e" => 0 }
+      vocals.default = 10
+      @left = @left.sort_by { |x| vocals[x] }
     end
     
     def select_character_by_frequence
