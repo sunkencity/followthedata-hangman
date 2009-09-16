@@ -1,16 +1,17 @@
 module FollowthedataHangmanPlayer
   class FollowthedataHangmanPlayer
 
-    A = [97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122]
+    A = [106, 113, 120, 122, 119, 107, 118, 102, 98, 103, 121, 104, 100, 109, 112, 117, 99, 108, 115, 116, 110, 114, 111, 97, 105, 101]
     def new_game l
       @w = Array.new(@f)
       @l = Array.new(A)
       @r = Array.new(123, 0)
+      @s = false
     end
 
     def guess w, l
       a w
-      b
+      b if @s 
       @l.pop.chr
     end
 
@@ -30,7 +31,10 @@ module FollowthedataHangmanPlayer
     end
 
     def word_list=(l) @f = l end
-    def incorrect_guess(g) @w.reject! { |w| w.include? g } end
+    def incorrect_guess(g) 
+      @w.reject! { |w| w.include? g } 
+      @s = true
+    end
     def correct_guess(g) @w.reject! { |w| !w.include?(g) } end
     def fail(r) ; end
     def game_result(r, w); end
