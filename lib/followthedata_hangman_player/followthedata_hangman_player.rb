@@ -6,12 +6,14 @@ module FollowthedataHangmanPlayer
       @w = Array.new(@f)
       @l = Array.new(A)
       @r = Array.new(123, 0)
-      @s = false
+      @nope = false
     end
 
     def guess w, l
-      a w
-      b if @s 
+      if @nope
+        a(w) 
+        b  
+      end
       @l.pop.chr
     end
 
@@ -33,7 +35,7 @@ module FollowthedataHangmanPlayer
     def word_list=(l) @f = l end
     def incorrect_guess(g) 
       @w.reject! { |w| w.include? g } 
-      @s = true
+      @nope = true
     end
     def correct_guess(g) @w.reject! { |w| !w.include?(g) } end
     def fail(r) ; end
